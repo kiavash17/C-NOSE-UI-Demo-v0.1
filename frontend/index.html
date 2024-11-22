@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lagomics Smell Representation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 1200px; margin: 2rem auto; }
+        h1 { color: #444; }
+        #smellInput { width: 300px; }
+        button { background-color: #007BFF; }
+        button:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lagomics Smell Representation</h1>
+        <input id="smellInput" type="text" placeholder="Enter a target smell">
+        <button id="generateMix">Generate Mix</button>
+        <div id="odorantMix"></div>
+    </div>
+    <script>
+        document.getElementById("generateMix").addEventListener("click", async () => {
+            const smell = document.getElementById("smellInput").value;
+            const response = await fetch("http://localhost:5000/run_pipeline", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ smell_description: smell })
+            });
+            const data = await response.json();
+            const odorantDiv = document.getElementById("odorantMix");
+            odorantDiv.innerHTML = "<h3>Odorant Mix</h3>";
+            data.compoundMix.odorants.forEach(odorant => {
+                const p = document.createElement("p");
+                p.textContent = `${odorant.name}: ${odorant.percentage}%`;
+                odorantDiv.appendChild(p);
+            });
+        });
+    </script>
+</body>
+</html>

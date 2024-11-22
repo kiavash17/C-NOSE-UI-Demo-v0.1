@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lagomics Smell Representation</title>
+    <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 1200px; margin: 2rem auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lagomics Smell Representation</h1>
+        <div id="cartridges"></div>
+    </div>
+    <script>
+        const cartridgesData = [{ id: 1, name: 'Cartridge 1', activation: 45 }];
+        const cartridgesContainer = document.getElementById('cartridges');
+        cartridgesData.forEach(cartridge => {
+            const viewerContainer = document.createElement('div');
+            viewerContainer.id = `viewer-${cartridge.id}`;
+            viewerContainer.style.height = "150px";
+            cartridgesContainer.appendChild(viewerContainer);
+        });
+    </script>
+</body>
+</html>
