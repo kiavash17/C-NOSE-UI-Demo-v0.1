@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from pipeline import query_openai_api, calculate_cartridge_activations
 from flask_cors import CORS
 import json
 from utils import clean_openai_response
+import os
 
 print(f"Using query_openai_api from {query_openai_api.__module__}")
 app = Flask(__name__)
@@ -23,6 +24,13 @@ SDF_FILES = [
     "smell_UI_CAS_SDF/9.89-43-0.sdf",
     "smell_UI_CAS_SDF/10.31906-04-4.sdf",
 ]
+
+# Route to serve SDF files
+@app.route('/smell_UI_CAS_SDF/<path:filename>', methods=['GET'])
+def serve_sdf_file(filename):
+    # Define the absolute path to the SDF directory
+    sdf_directory = os.path.join(os.getcwd(), 'data/smell_UI_CAS_SDF')
+    return send_from_directory(sdf_directory, filename)
 
 @app.route("/run_pipeline", methods=["POST"])
 def run_pipeline():
@@ -58,8 +66,9 @@ def run_pipeline():
         # print(f"###Cartridge activations returned: {cartridge_activations}")  # Log activations
 
         # Prepare cartridge data with SDF file paths
+        BASE_SDF_URL = "https://laughing-adventure-9qggv74gp54395xp-5000.app.github.dev/smell_UI_CAS_SDF/"
         cartridge_response = [
-            {"id": i + 1, "name": f"Cartridge {i + 1}", "activation": activation, "sdfFile": SDF_FILES[i]}
+            {"id": i + 1, "name": f"Cartridge {i + 1}", "activation": activation, "sdfFile": f"{BASE_SDF_URL}{os.path.basename(SDF_FILES[i])}"}
             for i, activation in enumerate(cartridge_activations)
         ]
         return jsonify({

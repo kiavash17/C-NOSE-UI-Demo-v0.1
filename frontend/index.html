@@ -6,12 +6,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lagomics Smell Representation</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .container { max-width: 1200px; margin: 2rem auto; }
-        h1 { color: #444; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1 {
+            color: #444;
+        }
         #smellInput { width: 300px; }
         button { background-color: #007BFF; }
+        .visualization-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 2rem;
+        }
+        .cartridge {
+            width: 150px;
+            padding: 1rem;
+            position: relative;
+            text-align: center;
+        }
+        .halo {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 150px;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0, 0, 255, 0.5);
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+        .accuracy-indicator {
+            margin-top: 2rem;
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
         button:hover { background-color: #0056b3; }
     </style>
 </head>
@@ -24,6 +69,10 @@
         <div id="loadingIndicator" style="display: none;">Processing your request...</div>
         <div id="odorantMix"></div>
         <div id="cartridges"></div>
+        <div id="accuracyIndicator" class="accuracy-indicator"></div>
+        <div class="visualization-section" id="cartridges"></div>
+
+
 
     </div>
     <!-- <script>
@@ -103,6 +152,11 @@
             const generateMixButton = document.getElementById("generateMix");
             const cartridgesContainer = document.getElementById("cartridges");
             const accuracyIndicator = document.getElementById("accuracyIndicator");
+            //const cartridgesData
+            if (!accuracyIndicator) {
+                console.error("Element with id 'accuracyIndicator' is missing!");
+                return;
+            }
     
             generateMixButton.addEventListener("click", async () => {
                 const smell = smellInput.value;
@@ -131,11 +185,11 @@
                         return null;
                     });
     
-                    const data = await response.json();
-                    if (data.error) {
-                        alert(data.error);
-                        return;
-                    }
+                    // const data = await response.json();
+                    // if (data.error) {
+                    //     alert(data.error);
+                    //     return;
+                    // }
     
                     // Clear previous data
                     cartridgesContainer.innerHTML = "";
@@ -196,6 +250,7 @@
                     console.error("Error fetching data:", error);
                     alert("An error occurred while fetching data.");
                 }
+                // KK todo: update accuracy indicator
             });
         });
     </script>    
